@@ -1,4 +1,4 @@
-module github.com/base58btc/cln
+module github.com/niftynei/cln
 
 go 1.21.4
 
@@ -45,5 +45,3 @@ require (
 	golang.org/x/sys v0.0.0-20220520151302-bc2c85ada10a // indirect
 	golang.org/x/term v0.0.0-20201126162022-7de9c90e9dd1 // indirect
 )
-
-replace github.com/niftynei/lnsocket/go => ../../lnsocket/go

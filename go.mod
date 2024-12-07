@@ -1,3 +1,3 @@
-module github.com/base58btc/cln-checkout
+module github.com/niftynei/cln-checkout
 
 go 1.21.4
