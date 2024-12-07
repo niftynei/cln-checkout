@@ -8,9 +8,6 @@ import (
 	"github.com/base58btc/clnsocket"
 )
 
-/* FIXME: make this an envvar */
-var token string = "6qthVaDryzXm-NpJXdJ4mReZ06auzaMWSQ0pY6HnX8Q9MA==";
-
 /* Ok let's go.
  * - what happens if lnsocket connection drops?
  * - fixme: handle reconnects/retries to lightning node
@@ -39,6 +36,7 @@ var subs []chan *InvoiceEvent
 var labelsTag string
 var runInvoice bool
 var invoiceDone chan bool
+var token string
 
 func initState(labelTag string) error {
 	if len(subs) > 0 {
@@ -53,14 +51,15 @@ func initState(labelTag string) error {
 	return nil
 }
 
-func Init(hostname, pubkey, labelTag string) error {
+func Init(hostname, pubkey, runeToken, labelTag string) error {
 	err := clnsocket.Init(hostname, pubkey)
 	if err != nil {
 		return err
 	}
 
+	token = runeToken
 	/* We require the new unified invoices feature */
-	onchainInvoices, err := clnsocket.HasOnchainInvoices(token)
+	onchainInvoices, err := clnsocket.HasOnchainInvoices(runeToken)
 	if err != nil {
 		return err
 	}
