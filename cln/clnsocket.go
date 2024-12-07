@@ -153,9 +153,17 @@ func NewInvoice(token string, labelTag string, amt uint64, expiry uint64, desc s
 		return nil, err
 	}
 
-	expiresAt := gjson.Get(result, "result.expires_at")
-	bolt11 := gjson.Get(result, "result.bolt11")
-	payHash := gjson.Get(result, "result.payment_hash")
+	invoices := gjson.Get(result, "result.invoices")
+	var expiresAt, bolt11, payHash gjson.Result
+	if invoices.Exists() {
+		expiresAt = gjson.Get(result, "result.invoices.0.expires_at")
+		bolt11 = gjson.Get(result, "result.invoices.0.bolt11")
+		payHash = gjson.Get(result, "result.invoices.0.payment_hash")
+	} else {
+		expiresAt = gjson.Get(result, "result.expires_at")
+		bolt11 = gjson.Get(result, "result.bolt11")
+		payHash = gjson.Get(result, "result.payment_hash")
+	}
 
 	if !expiresAt.Exists() || !bolt11.Exists() || !payHash.Exists() {
 		return nil, fmt.Errorf("Error parsing invoice result. %s", result)
