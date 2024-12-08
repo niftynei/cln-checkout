@@ -5,7 +5,8 @@ import (
 	"fmt"
 	"strings"
 	"time"
-	"github.com/base58btc/clnsocket"
+
+	"github.com/niftynei/cln-checkout/cln"
 )
 
 /* Ok let's go.
@@ -52,14 +53,14 @@ func initState(labelTag string) error {
 }
 
 func Init(hostname, pubkey, runeToken, labelTag string) error {
-	err := clnsocket.Init(hostname, pubkey)
+	err := cln.Init(hostname, pubkey)
 	if err != nil {
 		return err
 	}
 
 	token = runeToken
 	/* We require the new unified invoices feature */
-	onchainInvoices, err := clnsocket.HasOnchainInvoices(runeToken)
+	onchainInvoices, err := cln.HasOnchainInvoices(runeToken)
 	if err != nil {
 		return err
 	}
@@ -92,7 +93,7 @@ func labelMatch(label, labelTag string) bool {
 	return strings.HasPrefix(label, labelTag)
 }
 
-func filterInvoices(invoices []*clnsocket.Invoice) []*InvoiceEvent {
+func filterInvoices(invoices []*cln.Invoice) []*InvoiceEvent {
 	filtered := make([]*InvoiceEvent, 0)
 
 	for _, invoice := range invoices {
@@ -104,7 +105,7 @@ func filterInvoices(invoices []*clnsocket.Invoice) []*InvoiceEvent {
 	return filtered
 }
 
-func toInvoiceEvent(invoice *clnsocket.Invoice) *InvoiceEvent {
+func toInvoiceEvent(invoice *cln.Invoice) *InvoiceEvent {
 	return &InvoiceEvent {
 		Label: invoice.Label,
 		Invstring: invoice.Invstring,
@@ -124,7 +125,7 @@ func runInvoices(startIndex uint64) error {
 	/* Poll invoice until we get some back! */
 	index := startIndex
 	for runInvoice {
-		invoices, err := clnsocket.PollInvoices(token, index)
+		invoices, err := cln.PollInvoices(token, index)
 
 		if err != nil {
 			runInvoice = false
@@ -164,13 +165,13 @@ func RegisterForInvoiceUpdates(msgchan chan *InvoiceEvent) error {
 	return nil
 }
 
-func NewRestrictedInvoice(amt uint64, expiry uint64, desc string) (*clnsocket.InvoiceReq, error) {
-	inv, err := clnsocket.NewInvoice(token, labelsTag, amt, expiry, desc)
+func NewRestrictedInvoice(amt uint64, expiry uint64, desc string) (*cln.InvoiceReq, error) {
+	inv, err := cln.NewInvoice(token, labelsTag, amt, expiry, desc)
 	if err != nil {
 		return nil, err
 	}
 
-	inv.WaitRune, err = clnsocket.RestrictToWaitInvoice(token, inv.Label)
+	inv.WaitRune, err = cln.RestrictToWaitInvoice(token, inv.Label)
 	if err != nil {
 		return nil, err
 	}
@@ -182,5 +183,5 @@ func Shutdown() {
 	StopInvoiceWatch()
 
 	<- invoiceDone
-	clnsocket.Shutdown()
+	cln.Shutdown()
 }
