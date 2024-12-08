@@ -1,3 +1,3 @@
-module github.com/niftynei/cln-checkout
+module github.com/niftynei/cln-checkout/checkout
 
 go 1.21.4
