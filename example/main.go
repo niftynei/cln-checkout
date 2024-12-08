@@ -10,7 +10,7 @@ func main() {
 	log.SetPrefix("cln-checkout|")
 	log.SetFlags(log.Lshortfile | log.Ltime | log.LUTC)
 
-	err := checkout.Init("")
+	err := checkout.Init("", "", "", "")
 
 	if err != nil {
 		log.Fatal(err)
