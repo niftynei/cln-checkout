@@ -1,10 +1,10 @@
 module github.com/niftynei/cln-checkout/cln
 
-go 1.21.4
+go 1.21.6
 
 require (
-	github.com/niftynei/lnsocket/go v0.0.0-20231126210829-f7651ea81661
-	github.com/tidwall/gjson v1.17.0
+	github.com/niftynei/lnsocket/go v0.0.0-20241207233646-c414c20c1862
+	github.com/tidwall/gjson v1.18.0
 )
 
 require (
