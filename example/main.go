@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
-	"github.com/niftynei/cln-checkout/checkout"
+	checkout "github.com/niftynei/cln-checkout/checkout"
 )
 
 func main() {
